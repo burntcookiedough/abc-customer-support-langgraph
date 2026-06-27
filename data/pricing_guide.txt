@@ -1,0 +1,13 @@
+ABC Technologies Pricing Guide
+
+Starter Plan:
+For small teams. Includes core business management features, email support, and standard reporting.
+
+Professional Plan:
+For growing companies. Includes workflow automation, integrations, advanced analytics, and priority support.
+
+Enterprise Plan:
+For large organizations. Includes custom onboarding, single sign-on, audit logs, dedicated account management, and custom pricing.
+
+Billing:
+Monthly and annual billing are available. Annual subscriptions receive preferred pricing compared with month-to-month subscriptions.

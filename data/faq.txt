@@ -1,0 +1,13 @@
+ABC Technologies FAQ
+
+Password Reset:
+Customers can reset passwords from the login page by selecting "Forgot password" and following the secure link sent by email.
+
+Invoices:
+Invoices are available from Billing Settings. Account owners and billing administrators can download invoice copies.
+
+Profile Updates:
+Users can update profile details from Account Settings. Some account-level changes require administrator permissions.
+
+Support Hours:
+Standard support is available on business days. Enterprise customers may have enhanced support terms.

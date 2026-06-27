@@ -1,0 +1,76 @@
+Query 1: What are the pricing plans available for your software?
+Intent / Route: Sales
+Approval required: False
+Approval status: not_required
+Trace:
+  - Loaded SQLite conversation memory
+  - Classified intent as Sales
+  - Retrieved RAG context from company documents
+  - Sales agent drafted response
+  - Supervisor validated final response
+  - Saved interaction to SQLite memory
+Retrieved context:
+  - pricing_guide.txt: ABC Technologies Pricing Guide
+  - company_policy.txt: ABC Technologies Customer Policy Document
+Final response: Sales Support: ABC Technologies offers Starter, Professional, and Enterprise plans. pricing_guide.txt: ABC Technologies Pricing Guide Thank you for contacting ABC Technologies.
+
+Query 2: I forgot my account password.
+Intent / Route: Account
+Approval required: False
+Approval status: not_required
+Trace:
+  - Loaded SQLite conversation memory
+  - Classified intent as Account
+  - Retrieved RAG context from company documents
+  - Account agent drafted response
+  - Supervisor validated final response
+  - Saved interaction to SQLite memory
+Retrieved context:
+  - faq.txt: ABC Technologies FAQ
+  - technical_manual.txt: ABC Technologies Technical Manual
+Final response: Account Support: You can reset your password from the login page by selecting Forgot password. faq.txt: ABC Technologies FAQ Thank you for contacting ABC Technologies.
+
+Query 3: My application crashes whenever I upload a file.
+Intent / Route: Technical Support
+Approval required: False
+Approval status: not_required
+Trace:
+  - Loaded SQLite conversation memory
+  - Classified intent as Technical Support
+  - Retrieved RAG context from company documents
+  - Technical Support agent drafted response
+  - Supervisor validated final response
+  - Saved interaction to SQLite memory
+Retrieved context:
+  - technical_manual.txt: ABC Technologies Technical Manual
+  - faq.txt: ABC Technologies FAQ
+Final response: Technical Support: Please check supported file type, file size, browser version, and blocking extensions. technical_manual.txt: ABC Technologies Technical Manual Thank you for contacting ABC Technologies.
+
+Query 4: I need a refund for my annual subscription.
+Intent / Route: Billing
+Approval required: True
+Approval status: approved_for_demo
+Trace:
+  - Loaded SQLite conversation memory
+  - Classified intent as Billing
+  - Retrieved RAG context from company documents
+  - Billing agent drafted response
+  - Human supervisor approval completed
+  - Supervisor validated final response
+  - Saved interaction to SQLite memory
+Retrieved context:
+  - company_policy.txt: ABC Technologies Customer Policy Document
+  - pricing_guide.txt: ABC Technologies Pricing Guide
+Final response: Billing Support: I found that your request relates to billing or refund handling. company_policy.txt: ABC Technologies Customer Policy Document A human supervisor has reviewed this high-risk request and approved sending this guidance. Thank you for contacting ABC Technologies.
+
+Query 5: What was my previous support issue?
+Intent / Route: Memory Recall
+Approval required: False
+Approval status: not_required
+Trace:
+  - Loaded SQLite conversation memory
+  - Classified intent as Memory Recall
+  - Memory recall answered from SQLite
+  - Saved interaction to SQLite memory
+Retrieved context:
+Final response: Your previous support issue was classified as Billing: I need a refund for my annual subscription.
