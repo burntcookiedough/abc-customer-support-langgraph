@@ -127,6 +127,34 @@ def make_screenshots_pdf() -> None:
     pages[0].save(ARTIFACTS / "screenshots.pdf", save_all=True, append_images=pages[1:])
 
 
+def make_demo_screenshot_images() -> None:
+    output = (ARTIFACTS / "demo_output.txt").read_text(encoding="utf-8")
+    sections = [section.strip() for section in output.split("\n\n") if section.strip()]
+    for idx, section in enumerate(sections, start=1):
+        image = Image.new("RGB", (1400, 980), "#0f172a")
+        draw = ImageDraw.Draw(image)
+        draw.rounded_rectangle((28, 28, 1372, 952), radius=10, fill="#111827", outline="#334155", width=2)
+        draw.text((60, 55), f"Demo Query {idx} - Input / Output", fill="#f8fafc", font=font(30))
+        y = 115
+        for line in section.splitlines():
+            if line.startswith("Query "):
+                color = "#93c5fd"
+            elif line.startswith("Intent") or line.startswith("Approval") or line.startswith("Final response"):
+                color = "#bbf7d0"
+            elif line.startswith("Trace") or line.startswith("Retrieved"):
+                color = "#fde68a"
+            else:
+                color = "#e5e7eb"
+            wrapped = textwrap.wrap(line, width=112) or [""]
+            for part in wrapped:
+                draw.text((60, y), part, fill=color, font=font(22))
+                y += 31
+            y += 4
+            if y > 900:
+                break
+        image.save(ARTIFACTS / f"demo_query_{idx}_screenshot.png")
+
+
 def verify_db() -> None:
     db_path = ARTIFACTS / "memory.db"
     with sqlite3.connect(db_path) as conn:
@@ -140,6 +168,7 @@ def main() -> None:
     verify_db()
     make_workflow_diagram()
     make_schema_file()
+    make_demo_screenshot_images()
     make_screenshots_pdf()
 
 

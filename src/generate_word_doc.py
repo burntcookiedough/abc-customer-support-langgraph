@@ -30,6 +30,15 @@ def add_bullets(document: Document, items: list[str]) -> None:
         document.add_paragraph(item, style="List Bullet")
 
 
+def add_code_block(document: Document, title: str, code: str) -> None:
+    add_heading(document, title, level=2)
+    paragraph = document.add_paragraph()
+    run = paragraph.add_run(code.strip())
+    run.font.name = "Consolas"
+    run.font.size = Pt(8)
+    paragraph.paragraph_format.space_after = Pt(8)
+
+
 def build_doc() -> Path:
     document = Document()
     section = document.sections[0]
@@ -169,6 +178,22 @@ def build_doc() -> Path:
         set_cell_text(row[1], expected)
         set_cell_text(row[2], actual)
         set_cell_text(row[3], result)
+
+    add_heading(document, "Input and Output Screenshots")
+    document.add_paragraph(
+        "The following screenshots show the actual demo execution for each required sample query, including input, route, approval status, trace, retrieved context, and final response."
+    )
+    for idx in range(1, 6):
+        screenshot = ARTIFACTS / f"demo_query_{idx}_screenshot.png"
+        if screenshot.exists():
+            document.add_paragraph(f"Query {idx} execution screenshot")
+            document.add_picture(str(screenshot), width=Inches(6.8))
+
+    add_heading(document, "Source Code")
+    support_code = (ROOT / "src" / "support_system.py").read_text(encoding="utf-8")
+    run_demo_code = (ROOT / "src" / "run_demo.py").read_text(encoding="utf-8")
+    add_code_block(document, "Main LangGraph Workflow Code", support_code)
+    add_code_block(document, "Demo Runner Code", run_demo_code)
 
     add_heading(document, "Submission Files")
     add_bullets(
