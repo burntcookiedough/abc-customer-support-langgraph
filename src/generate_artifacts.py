@@ -23,7 +23,7 @@ def font(size: int) -> ImageFont.FreeTypeFont | ImageFont.ImageFont:
 
 
 def draw_box(draw: ImageDraw.ImageDraw, xy: tuple[int, int, int, int], text: str, fill: str) -> None:
-    draw.rounded_rectangle(xy, radius=8, fill=fill, outline="#1f2937", width=2)
+    draw.rectangle(xy, fill="white", outline="black", width=2)
     x1, y1, x2, y2 = xy
     lines = textwrap.wrap(text, width=24)
     line_height = 24
@@ -31,20 +31,20 @@ def draw_box(draw: ImageDraw.ImageDraw, xy: tuple[int, int, int, int], text: str
     y = y1 + ((y2 - y1) - total_height) // 2
     for line in lines:
         bbox = draw.textbbox((0, 0), line, font=font(18))
-        draw.text((x1 + ((x2 - x1) - (bbox[2] - bbox[0])) // 2, y), line, fill="#111827", font=font(18))
+        draw.text((x1 + ((x2 - x1) - (bbox[2] - bbox[0])) // 2, y), line, fill="black", font=font(18))
         y += line_height
 
 
 def draw_arrow(draw: ImageDraw.ImageDraw, start: tuple[int, int], end: tuple[int, int]) -> None:
-    draw.line([start, end], fill="#111827", width=3)
+    draw.line([start, end], fill="black", width=3)
     x, y = end
-    draw.polygon([(x, y), (x - 10, y - 6), (x - 10, y + 6)], fill="#111827")
+    draw.polygon([(x, y), (x - 10, y - 6), (x - 10, y + 6)], fill="black")
 
 
 def make_workflow_diagram() -> None:
-    image = Image.new("RGB", (1500, 920), "#f8fafc")
+    image = Image.new("RGB", (1500, 920), "white")
     draw = ImageDraw.Draw(image)
-    draw.text((50, 35), "ABC Technologies LangGraph Customer Support Workflow", fill="#111827", font=font(32))
+    draw.text((50, 35), "ABC Technologies LangGraph Customer Support Workflow", fill="black", font=font(32))
 
     boxes = {
         "Customer Query": (80, 120, 330, 200),
@@ -62,29 +62,17 @@ def make_workflow_diagram() -> None:
         "Final Response": (1210, 720, 1430, 800),
     }
 
-    fills = {
-        "Customer Query": "#dbeafe",
-        "Load SQLite Memory": "#dcfce7",
-        "Intent Classification": "#fef3c7",
-        "Memory Recall Agent": "#e0e7ff",
-        "RAG Retrieval": "#e0f2fe",
-        "Human Approval": "#fee2e2",
-        "Supervisor Agent": "#ede9fe",
-        "Save Memory": "#dcfce7",
-        "Final Response": "#d1fae5",
-    }
-
     for label, xy in boxes.items():
-        draw_box(draw, xy, label, fills.get(label, "#ffffff"))
+        draw_box(draw, xy, label, "white")
 
     draw_arrow(draw, (330, 160), (430, 160))
     draw_arrow(draw, (680, 160), (780, 160))
     draw_arrow(draw, (1030, 160), (1130, 80))
     draw_arrow(draw, (1030, 185), (1130, 240))
     for x in [285, 575, 865, 1155]:
-        draw.line([(1255, 280), (1255, 330), (x, 330), (x, 390)], fill="#111827", width=3)
+        draw.line([(1255, 280), (1255, 330), (x, 330), (x, 390)], fill="black", width=3)
     draw_arrow(draw, (865, 470), (865, 570))
-    draw.text((982, 585), "high-risk only", fill="#7f1d1d", font=font(16))
+    draw.text((982, 585), "high-risk only", fill="black", font=font(16))
     for start in [(285, 470), (575, 470), (1155, 470), (865, 650), (1255, 120)]:
         draw_arrow(draw, start, (685, 720))
     draw_arrow(draw, (810, 760), (910, 760))
@@ -168,8 +156,6 @@ def main() -> None:
     verify_db()
     make_workflow_diagram()
     make_schema_file()
-    make_demo_screenshot_images()
-    make_screenshots_pdf()
 
 
 if __name__ == "__main__":

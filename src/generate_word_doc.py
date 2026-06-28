@@ -22,7 +22,7 @@ def set_cell_text(cell, text: str, bold: bool = False) -> None:
 def add_heading(document: Document, text: str, level: int = 1) -> None:
     heading = document.add_heading(text, level=level)
     for run in heading.runs:
-        run.font.color.rgb = RGBColor(31, 78, 121)
+        run.font.color.rgb = RGBColor(0, 0, 0)
 
 
 def add_bullets(document: Document, items: list[str]) -> None:
@@ -45,14 +45,8 @@ def add_screenshot_placeholder(document: Document, title: str, expected_path: st
     table = document.add_table(rows=1, cols=1)
     table.style = "Table Grid"
     cell = table.rows[0].cells[0]
-    paragraph = cell.paragraphs[0]
-    run = paragraph.add_run("Paste screenshot here")
-    run.bold = True
-    run.font.size = Pt(14)
-    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    cell.add_paragraph("Screenshot must show the terminal input and output for this query.")
-    for point in proof_points:
-        cell.add_paragraph(point, style="List Bullet")
+    for _ in range(8):
+        cell.add_paragraph("")
 
 
 def build_doc() -> Path:
@@ -68,15 +62,15 @@ def build_doc() -> Path:
     run = title.add_run("AI-Powered Customer Support Automation System")
     run.bold = True
     run.font.size = Pt(22)
-    run.font.color.rgb = RGBColor(31, 78, 121)
+    run.font.color.rgb = RGBColor(0, 0, 0)
 
     subtitle = document.add_paragraph()
     subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
     sub = subtitle.add_run("ABC Technologies | LangGraph Project Documentation")
     sub.font.size = Pt(12)
-    sub.font.color.rgb = RGBColor(89, 89, 89)
+    sub.font.color.rgb = RGBColor(0, 0, 0)
 
-    add_heading(document, "Project Overview")
+    add_heading(document, "1. Project Brief")
     document.add_paragraph(
         "ABC Technologies receives customer support requests for product information, technical issues, "
         "billing queries, account management, and refunds. This project implements a LangGraph workflow "
@@ -84,7 +78,7 @@ def build_doc() -> Path:
         "uses SQLite conversation memory, handles high-risk approval, and generates a supervised final response."
     )
 
-    add_heading(document, "Business Requirements Covered")
+    add_heading(document, "2. Requirements Covered")
     add_bullets(
         document,
         [
@@ -98,7 +92,7 @@ def build_doc() -> Path:
         ],
     )
 
-    add_heading(document, "LangGraph Workflow")
+    add_heading(document, "3. Workflow Diagram")
     document.add_paragraph(
         "The workflow starts with SQLite memory loading, then classifies intent. Department requests use RAG retrieval "
         "before reaching a specialized support agent. High-risk requests pass through human approval. All responses are "
@@ -109,7 +103,7 @@ def build_doc() -> Path:
         document.add_picture(str(diagram), width=Inches(6.8))
         document.paragraphs[-1].alignment = WD_ALIGN_PARAGRAPH.CENTER
 
-    add_heading(document, "State Structure")
+    add_heading(document, "4. State Structure")
     table = document.add_table(rows=1, cols=2)
     table.style = "Table Grid"
     set_cell_text(table.rows[0].cells[0], "State Field", True)
@@ -129,7 +123,7 @@ def build_doc() -> Path:
         set_cell_text(row[0], field)
         set_cell_text(row[1], purpose)
 
-    add_heading(document, "Task Coverage")
+    add_heading(document, "5. Task Coverage")
     task_table = document.add_table(rows=1, cols=3)
     task_table.style = "Table Grid"
     for idx, label in enumerate(["Task", "Requirement", "Implementation"]):
@@ -152,7 +146,7 @@ def build_doc() -> Path:
         set_cell_text(row[1], requirement)
         set_cell_text(row[2], implementation)
 
-    add_heading(document, "Knowledge Base Documents")
+    add_heading(document, "6. Knowledge Base Documents")
     add_bullets(
         document,
         [
@@ -163,20 +157,20 @@ def build_doc() -> Path:
         ],
     )
 
-    add_heading(document, "Human-in-the-Loop Approval")
+    add_heading(document, "7. Human Approval")
     document.add_paragraph(
         "The system marks refund requests, subscription cancellation, account closure, compensation, and management escalation "
         "as high-risk. These requests are not finalized directly by the support agent; they route to the human approval node "
         "before supervisor validation."
     )
 
-    add_heading(document, "SQLite Memory")
+    add_heading(document, "8. SQLite Memory")
     document.add_paragraph(
         "The SQLite database contains a conversations table with customer ID, query, intent, response, and timestamp. "
         "The memory recall query retrieves the customer's most recent previous issue."
     )
 
-    add_heading(document, "Demonstration Results")
+    add_heading(document, "9. Demonstration Results")
     demo_table = document.add_table(rows=1, cols=4)
     demo_table.style = "Table Grid"
     for idx, label in enumerate(["Query", "Expected Path", "Actual Route", "Result"]):
@@ -195,21 +189,7 @@ def build_doc() -> Path:
         set_cell_text(row[2], actual)
         set_cell_text(row[3], result)
 
-    add_heading(document, "Input and Output Screenshots")
-    document.add_paragraph(
-        "The following screenshots show the actual demo execution for each required sample query, including input, route, approval status, trace, retrieved context, and final response."
-    )
-    for idx in range(1, 6):
-        screenshot = ARTIFACTS / f"demo_query_{idx}_screenshot.png"
-        if screenshot.exists():
-            document.add_paragraph(f"Query {idx} execution screenshot")
-            document.add_picture(str(screenshot), width=Inches(6.8))
-
-    add_heading(document, "Screenshots to Paste")
-    document.add_paragraph(
-        "Use these slots for your own terminal screenshots after running python src\\run_demo.py. "
-        "Paste one screenshot per query in the same order as the assignment."
-    )
+    add_heading(document, "10. Screenshots")
     screenshot_slots = [
         (
             "Query 1 Screenshot - Pricing Plans",
@@ -265,20 +245,20 @@ def build_doc() -> Path:
     for title, expected_path, points in screenshot_slots:
         add_screenshot_placeholder(document, title, expected_path, points)
 
-    add_heading(document, "Source Code")
+    add_heading(document, "11. Source Code")
     support_code = (ROOT / "src" / "support_system.py").read_text(encoding="utf-8")
     run_demo_code = (ROOT / "src" / "run_demo.py").read_text(encoding="utf-8")
     add_code_block(document, "Main LangGraph Workflow Code", support_code)
     add_code_block(document, "Demo Runner Code", run_demo_code)
 
-    add_heading(document, "Submission Files")
+    add_heading(document, "12. Submission Files")
     add_bullets(
         document,
         [
             "Source code: src/support_system.py, src/run_demo.py, src/generate_artifacts.py, src/generate_word_doc.py.",
             "README.md: setup steps and run instructions.",
             "Workflow diagram: artifacts/workflow_diagram.png.",
-            "Screenshots PDF: artifacts/screenshots.pdf.",
+            "Screenshot slots: included in Section 10 for manually pasted terminal screenshots.",
             "SQLite memory: artifacts/memory.db and artifacts/memory_schema.sql.",
             "Demo output: artifacts/demo_output.txt.",
         ],

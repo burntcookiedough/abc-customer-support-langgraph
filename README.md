@@ -27,7 +27,6 @@ docs/
   documentation_report.md
 artifacts/
   workflow_diagram.png
-  screenshots.pdf
   demo_output.txt
   memory.db
 ```
@@ -55,4 +54,3 @@ The demo creates `artifacts/memory.db` and writes execution output to `artifacts
 3. My application crashes whenever I upload a file.
 4. I need a refund for my annual subscription.
 5. What was my previous support issue?
-
