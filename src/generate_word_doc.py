@@ -39,6 +39,22 @@ def add_code_block(document: Document, title: str, code: str) -> None:
     paragraph.paragraph_format.space_after = Pt(8)
 
 
+def add_screenshot_placeholder(document: Document, title: str, expected_path: str, proof_points: list[str]) -> None:
+    add_heading(document, title, level=2)
+    document.add_paragraph(f"Expected path: {expected_path}")
+    table = document.add_table(rows=1, cols=1)
+    table.style = "Table Grid"
+    cell = table.rows[0].cells[0]
+    paragraph = cell.paragraphs[0]
+    run = paragraph.add_run("Paste screenshot here")
+    run.bold = True
+    run.font.size = Pt(14)
+    paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    cell.add_paragraph("Screenshot must show the terminal input and output for this query.")
+    for point in proof_points:
+        cell.add_paragraph(point, style="List Bullet")
+
+
 def build_doc() -> Path:
     document = Document()
     section = document.sections[0]
@@ -188,6 +204,66 @@ def build_doc() -> Path:
         if screenshot.exists():
             document.add_paragraph(f"Query {idx} execution screenshot")
             document.add_picture(str(screenshot), width=Inches(6.8))
+
+    add_heading(document, "Screenshots to Paste")
+    document.add_paragraph(
+        "Use these slots for your own terminal screenshots after running python src\\run_demo.py. "
+        "Paste one screenshot per query in the same order as the assignment."
+    )
+    screenshot_slots = [
+        (
+            "Query 1 Screenshot - Pricing Plans",
+            "Sales",
+            [
+                "Input visible: What are the pricing plans available for your software?",
+                "Route visible: Sales.",
+                "Retrieved context visible: Pricing Guide.",
+                "Final response visible: Starter, Professional, and Enterprise plans.",
+            ],
+        ),
+        (
+            "Query 2 Screenshot - Forgot Password",
+            "Account",
+            [
+                "Input visible: I forgot my account password.",
+                "Route visible: Account.",
+                "Retrieved context visible: FAQ or password reset information.",
+                "Final response visible: password reset guidance.",
+            ],
+        ),
+        (
+            "Query 3 Screenshot - Upload Crash",
+            "Technical Support",
+            [
+                "Input visible: My application crashes whenever I upload a file.",
+                "Route visible: Technical Support.",
+                "Retrieved context visible: Technical Manual.",
+                "Final response visible: file type, file size, browser, or extension troubleshooting.",
+            ],
+        ),
+        (
+            "Query 4 Screenshot - Refund Request",
+            "Billing with human approval",
+            [
+                "Input visible: I need a refund for my annual subscription.",
+                "Route visible: Billing.",
+                "Approval visible: approval required is True and supervisor approval is completed.",
+                "Final response visible: refund or billing response after approval.",
+            ],
+        ),
+        (
+            "Query 5 Screenshot - Previous Issue",
+            "Memory Recall",
+            [
+                "Input visible: What was my previous support issue?",
+                "Route visible: Memory Recall.",
+                "SQLite memory visible: previous Billing refund issue is recalled.",
+                "Final response visible: previous support issue answer.",
+            ],
+        ),
+    ]
+    for title, expected_path, points in screenshot_slots:
+        add_screenshot_placeholder(document, title, expected_path, points)
 
     add_heading(document, "Source Code")
     support_code = (ROOT / "src" / "support_system.py").read_text(encoding="utf-8")
