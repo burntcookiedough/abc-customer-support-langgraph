@@ -49,6 +49,31 @@ def add_screenshot_placeholder(document: Document, title: str, expected_path: st
         cell.add_paragraph("")
 
 
+def add_submission_checklist(document: Document) -> None:
+    add_heading(document, "13. Final Submission Checklist")
+    table = document.add_table(rows=1, cols=3)
+    table.style = "Table Grid"
+    for idx, label in enumerate(["Required Item", "Where It Is", "Status"]):
+        set_cell_text(table.rows[0].cells[idx], label, True)
+    rows = [
+        ("Source Code (.zip)", "Project ZIP contains src/, data/, docs/, artifacts/, README.md, and requirements.txt.", "Included"),
+        ("README.md", "README.md contains project description, setup steps, and run command.", "Included"),
+        ("Workflow Diagram", "artifacts/workflow_diagram.png and artifacts/workflow_diagram.mmd.", "Included"),
+        ("Screenshots PDF", "Create this after pasting your real execution screenshots into Section 10.", "Pending real screenshots"),
+        ("SQLite Memory File/Schema", "artifacts/memory.db and artifacts/memory_schema.sql.", "Included"),
+        ("Task Output Screenshot - Agent Routing", "Section 10, Query 1 to Query 3 screenshot spaces.", "Blank space provided"),
+        ("Task Output Screenshot - Human-in-the-Loop", "Section 10, Query 4 screenshot space.", "Blank space provided"),
+        ("Task Output Screenshot - RAG Retrieval", "Section 10 screenshots should show retrieved context lines.", "Blank space provided"),
+        ("Task Output Screenshot - Memory Storage & Recall", "Section 10, Query 5 screenshot space.", "Blank space provided"),
+        ("Task Output Screenshot - Final Response Generation", "Section 10 screenshots should show final response lines.", "Blank space provided"),
+    ]
+    for item, location, status in rows:
+        row = table.add_row().cells
+        set_cell_text(row[0], item)
+        set_cell_text(row[1], location)
+        set_cell_text(row[2], status)
+
+
 def build_doc() -> Path:
     document = Document()
     section = document.sections[0]
@@ -263,6 +288,7 @@ def build_doc() -> Path:
             "Demo output: artifacts/demo_output.txt.",
         ],
     )
+    add_submission_checklist(document)
 
     output = DOCS / "ABC_Technologies_Customer_Support_Automation_Report.docx"
     document.save(output)
