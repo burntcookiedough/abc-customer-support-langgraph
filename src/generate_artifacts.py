@@ -154,7 +154,6 @@ def verify_db() -> None:
 def main() -> None:
     ARTIFACTS.mkdir(parents=True, exist_ok=True)
     verify_db()
-    make_workflow_diagram()
     make_schema_file()
 
 

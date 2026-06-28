@@ -1,0 +1,20 @@
+flowchart LR
+    A[Customer Query] --> B[Load SQLite Memory]
+    B --> C[Classify Intent]
+    C -->|Memory recall| M[Memory Agent]
+    C -->|Sales / Technical / Billing / Account| R[Retrieve Knowledge Base Context]
+    R --> D{Route by Department}
+    D -->|Sales| S[Sales Support Agent]
+    D -->|Technical| T[Technical Support Agent]
+    D -->|Billing| G[Billing Support Agent]
+    D -->|Account| Q[Account Support Agent]
+    S --> H{High-Risk Request?}
+    T --> H
+    G --> H
+    Q --> H
+    H -->|Yes| P[Human Supervisor Approval]
+    H -->|No| V[Supervisor Validation]
+    P --> V
+    M --> W[Save Conversation Memory]
+    V --> W
+    W --> Z[Final Customer Response]
